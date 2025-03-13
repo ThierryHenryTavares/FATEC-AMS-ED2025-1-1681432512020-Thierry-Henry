@@ -8,67 +8,51 @@
 /*----------------------------------------------------------------------------------*/
 #include <stdio.h>
 
-#define MAX_CANDIDATOS 50
-
 struct Cand {
-    char nomeal[100];
-    float ntPE[4], ntAC[5], ntPP[10], ntEB[3];
-    float ntfinal;
+    char nome[100];
+    float PE[4], AC[5], PP[10], EB[3];
+    float notaFinal;
 };
 
-float calcularNota(float *notas, int qtdnotas) {
-    float soma = 0.0, maior = notas[0], menor = notas[0];
-    
-    for (int i = 0; i < qtdnotas; i++) {
+float calcularNota(float *notas, int qtd) {
+    if (qtd < 3) return 0; // Se tiver menos de 3 notas, não faz sentido calcular
+
+    float soma = 0, maior = notas[0], menor = notas[0];
+    for (int i = 0; i < qtd; i++) {
         soma += notas[i];
         if (notas[i] > maior) maior = notas[i];
         if (notas[i] < menor) menor = notas[i];
     }
-    
-    return (soma - maior - menor) / (qtdnotas - 2);
+    return (soma - maior - menor) / (qtd - 2); // Média sem a maior e menor nota
 }
 
-void inserirCand(struct Cand *candidato) {
-    printf("Insira o nome do candidato: ");
-    scanf(" %[^
-]", candidato->nomeal);
-    
-    printf("\nDigite as 4 notas da Prova Escrita (PE):\n");
-    for(int i = 0; i < 4; i++) {
-        printf("Nota %d: ", i + 1);
-        scanf("%f", &candidato->ntPE[i]);
-    }
-    
-    printf("\nDigite as 5 notas da Análise Curricular (AC):\n");
-    for(int i = 0; i < 5; i++) {
-        printf("Nota %d: ", i + 1);
-        scanf("%f", &candidato->ntAC[i]);
-    }
-    
-    printf("\nDigite as 10 notas da Prova Prática (PP):\n");
-    for(int i = 0; i < 10; i++) {
-        printf("Nota %d: ", i + 1);
-        scanf("%f", &candidato->ntPP[i]);
-    }
-    
-    printf("\nDigite as 3 notas da Entrevista em Banca (EB):\n");
-    for(int i = 0; i < 3; i++) {
-        printf("Nota %d: ", i + 1);
-        scanf("%f", &candidato->ntEB[i]);
-    }
-    
-    float PE = calcularNota(candidato->ntPE, 4);
-    float AC = calcularNota(candidato->ntAC, 5);
-    float PP = calcularNota(candidato->ntPP, 10);
-    float EB = calcularNota(candidato->ntEB, 3);
-    
-    candidato->ntfinal = (PE * 0.3) + (AC * 0.1) + (PP * 0.4) + (EB * 0.2);
+void inserirCandidato(struct Cand *c) {
+    printf("Nome do candidato: ");
+    getchar(); // Evita problema no buffer
+    fgets(c->nome, sizeof(c->nome), stdin);
+    c->nome[strcspn(c->nome, "\n")] = 0;
+
+    printf("\nNotas da Prova Escrita (4 notas):\n");
+    for (int i = 0; i < 4; i++) scanf("%f", &c->PE[i]);
+
+    printf("\nNotas da Análise Curricular (5 notas):\n");
+    for (int i = 0; i < 5; i++) scanf("%f", &c->AC[i]);
+
+    printf("\nNotas da Prova Prática (10 notas):\n");
+    for (int i = 0; i < 10; i++) scanf("%f", &c->PP[i]);
+
+    printf("\nNotas da Entrevista em Banca (3 notas):\n");
+    for (int i = 0; i < 3; i++) scanf("%f", &c->EB[i]);
+
+    // Calculando a nota final com os pesos certos
+    c->notaFinal = (calcularNota(c->PE, 4) * 0.3) + (calcularNota(c->AC, 5) * 0.1) +
+                   (calcularNota(c->PP, 10) * 0.4) + (calcularNota(c->EB, 3) * 0.2);
 }
 
 void ordenarCandidatos(struct Cand *candidatos, int total) {
     for (int i = 0; i < total - 1; i++) {
         for (int j = 0; j < total - i - 1; j++) {
-            if (candidatos[j].ntfinal < candidatos[j + 1].ntfinal) {
+            if (candidatos[j].notaFinal < candidatos[j + 1].notaFinal) {
                 struct Cand temp = candidatos[j];
                 candidatos[j] = candidatos[j + 1];
                 candidatos[j + 1] = temp;
@@ -77,41 +61,40 @@ void ordenarCandidatos(struct Cand *candidatos, int total) {
     }
 }
 
-void top5(struct Cand *candidatos, int total) {
+void exibirTop5(struct Cand *candidatos, int total) {
+    if (total == 0) {
+        printf("\nNenhum candidato cadastrado ainda.\n");
+        return;
+    }
+
+    ordenarCandidatos(candidatos, total);
     int qtd = (total < 5) ? total : 5;
     printf("\n===== TOP %d Candidatos =====\n", qtd);
     for (int i = 0; i < qtd; i++) {
-        printf("\n%dº Lugar: %s", i + 1, candidatos[i].nomeal);
-        printf("\nNota Final: %.2f\n", candidatos[i].ntfinal);
+        printf("\n%dº Lugar: %s", i + 1, candidatos[i].nome);
+        printf("\nNota Final: %.2f\n", candidatos[i].notaFinal);
     }
 }
 
 int main() {
-    struct Cand candidatos[MAX_CANDIDATOS];
-    int totalCan, opcao;
+    struct Cand candidatos[50];
+    int totalCan = 0, opcao;
 
     do {
         printf("\n1 - Cadastrar Candidato\n2 - Exibir Ranking\n3 - Sair\nEscolha: ");
         scanf("%d", &opcao);
-        getchar();
 
         switch (opcao) {
             case 1:
-                if (totalCan < MAX_CANDIDATOS) {
-                    printf("\n== Candidato %d ==\n", totalCan + 1);
-                    inserirCand(&candidatos[totalCan]);
+                if (totalCan < 50) {
+                    inserirCandidato(&candidatos[totalCan]);
                     totalCan++;
                 } else {
                     printf("\nLimite de candidatos atingido!\n");
                 }
                 break;
             case 2:
-                if (totalCan > 0) {
-                    ordenarCandidatos(candidatos, totalCan);
-                    top5(candidatos, totalCan);
-                } else {
-                    printf("\nNenhum candidato cadastrado ainda.\n");
-                }
+                exibirTop5(candidatos, totalCan);
                 break;
             case 3:
                 printf("Saindo...\n");
@@ -123,3 +106,4 @@ int main() {
 
     return 0;
 }
+
