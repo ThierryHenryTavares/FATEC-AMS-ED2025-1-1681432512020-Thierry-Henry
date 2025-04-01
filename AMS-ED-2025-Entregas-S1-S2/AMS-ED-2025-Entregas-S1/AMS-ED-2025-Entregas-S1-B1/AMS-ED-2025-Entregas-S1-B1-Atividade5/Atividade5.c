@@ -1,3 +1,11 @@
+/*----------------------------------------------------------------------------------*/
+/*   FATEC-São Caetano do Sul                 Estrutura de Dados                    */
+/*                         Id da Atividade: Atividade B1-5                          */
+/*             Objetivo: Transformar Lista Ligada em Pilha                          */
+/*                                                                                  */
+/*                                  Autor: Thierry Henry Tavares de Andrade         */
+/*                                                                   Data:01/04/2025*/
+/*----------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <string.h>
 
