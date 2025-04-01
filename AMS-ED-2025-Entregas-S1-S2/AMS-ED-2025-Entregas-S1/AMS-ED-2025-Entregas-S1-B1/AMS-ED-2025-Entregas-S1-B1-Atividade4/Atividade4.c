@@ -1,3 +1,11 @@
+/*----------------------------------------------------------------------------------*/
+/*   FATEC-São Caetano do Sul                 Estrutura de Dados                    */
+/*                         Id da Atividade: Atividade B1-4                          */
+/*             Objetivo: Manipulação de pilha                                       */
+/*                                                                                  */
+/*                                  Autor: Thierry Henry Tavares de Andrade         */
+/*                                                                   Data:01/04/2025*/
+/*----------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 
