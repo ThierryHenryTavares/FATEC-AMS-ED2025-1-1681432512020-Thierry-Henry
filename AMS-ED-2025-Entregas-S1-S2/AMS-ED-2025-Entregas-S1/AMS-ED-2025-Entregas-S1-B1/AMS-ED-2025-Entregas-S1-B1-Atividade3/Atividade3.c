@@ -1,3 +1,11 @@
+/*----------------------------------------------------------------------------------*/
+/*   FATEC-São Caetano do Sul                 Estrutura de Dados                    */
+/*                         Id da Atividade: Atividade B1-3                          */
+/*             Objetivo: Sistema de Pedido de Restaurante                           */
+/*                                                                                  */
+/*                                  Autor: Thierry Henry Tavares de Andrade         */
+/*                                                                   Data:25/03/2025*/
+/*----------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <string.h>
 
