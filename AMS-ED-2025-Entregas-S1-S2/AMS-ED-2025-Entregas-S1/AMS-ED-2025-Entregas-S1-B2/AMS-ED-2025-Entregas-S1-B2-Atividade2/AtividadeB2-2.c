@@ -1,3 +1,11 @@
+/*----------------------------------------------------------------------------------*/
+/*   FATEC-São Caetano do Sul                 Estrutura de Dados                    */
+/*                         Id da Atividade: Atividade B2-2                          */
+/*             Objetivo: BubbleSort                                                 */
+/*                                                                                  */
+/*                                  Autor: Thierry Henry Tavares de Andrade         */
+/*                                                                   Data:06/05/2025*/
+/*----------------------------------------------------------------------------------*/
 #include <stdio.h>
 
 int main() {
